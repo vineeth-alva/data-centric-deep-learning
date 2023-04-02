@@ -50,6 +50,7 @@ def build_regression_test(system, loader):
   losses = []
   is_correct = []
 
+
   pbar = tqdm(total = len(loader), leave = True, position = 0)
   for batch in loader:
     labels = batch[1]  # these are the true labels!
@@ -58,8 +59,8 @@ def build_regression_test(system, loader):
     # the actual prediction is the argmax of the logits
     preds = torch.argmax(logits, dim=1)
 
-    batch_is_correct = []
-    batch_loss = []
+    batch_is_correct = torch.eq(labels, preds).tolist()
+    batch_loss = F.cross_entropy(logits, labels, reduction='none')
     # ================================
     # FILL ME OUT
     # 
