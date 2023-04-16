@@ -21,6 +21,7 @@ class ProductReviewEmbeddings(Dataset):
   def __init__(self, lang = 'en', split = 'train', weights = None):
     super().__init__()
     self.data = pd.read_csv(join(DATA_DIR, lang, f'{split}.csv'))
+    print(f"{DATA_DIR=}, {lang=}, {split=}")
     self.embedding = torch.load(join(DATA_DIR, lang, f'{split}.pt'))
     if weights is None:
       weights = torch.ones(self.embedding.size(0))
@@ -51,6 +52,11 @@ class ProductReviewEmbeddings(Dataset):
     # --
     # Convert tokens to lowercase when updating vocab.
     # ===============================
+    for review in self.data.review:
+      tokens = review.split()
+      for token in tokens:
+        vocab[token.lower()] += 1
+      
     return dict(vocab)
 
   def get_labels(self):
@@ -89,6 +95,7 @@ class ProductReviewStream(Dataset):
     super().__init__()
     assert index in range(1, 9), f"Invalid index: {index}"
     self.data = pd.read_csv(join(DATA_DIR, 'stream', f'stream{index}.csv'))
+    print(f"{DATA_DIR=}, stream{index}.pt")
     self.embedding = torch.load(join(DATA_DIR, 'stream', f'stream{index}.pt'))
 
   def get_vocab(self):
@@ -110,6 +117,11 @@ class ProductReviewStream(Dataset):
     # --
     # vocab: dict[str, int]
     # ===============================
+    for review in self.data.review:
+      tokens = review.split()
+      for token in tokens:
+        vocab[token.lower()] += 1
+      
     return dict(vocab)
 
   def __getitem__(self, index):

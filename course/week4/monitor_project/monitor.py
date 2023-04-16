@@ -49,7 +49,7 @@ def main(args):
       print('\n==========================')
       print(f'STREAM ({index} out of 8)')
       print('==========================')
-      print(f'KS test p-value: {results["ks_score"]:.3f}')
+      print(f'KS test p-value: {results["ks_score"].pvalue:.3f}')
       print(f'Histogram intersection: {results["hist_score"]:.3f}')
       print(f'OOD Vocab %: {results["outlier_score"]*100:.2f}')
       print('')  # new line
